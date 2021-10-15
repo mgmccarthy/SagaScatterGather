@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31402.337
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagaScatterGather.Saga.Endpoint", "SagaScatterGather.Saga.Endpoint\SagaScatterGather.Saga.Endpoint.csproj", "{36DF95AC-F707-428B-AA9F-7747DCFA34BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagaScatterGather.Shared", "SagaScatterGather.Shared\SagaScatterGather.Shared.csproj", "{46C57B5A-B9C1-4DFD-8789-85C797D4CF54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagaScatterGather.Vendor1.Endpoint", "SagaScatterGather.Vendor1.Endpoint\SagaScatterGather.Vendor1.Endpoint.csproj", "{B024A334-7994-4BB3-AF96-522B2BDF5F08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagaScatterGather.Vendor2.Endpoint", "SagaScatterGather.Vendor2.Endpoint\SagaScatterGather.Vendor2.Endpoint.csproj", "{5F3FE09F-545F-4B35-A8BC-51F5D02350D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagaScatterGather.Vendor3.Endpoint", "SagaScatterGather.Vendor3.Endpoint\SagaScatterGather.Vendor3.Endpoint.csproj", "{2A099E8D-F70D-4DB5-A774-D32D43CE0177}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{36DF95AC-F707-428B-AA9F-7747DCFA34BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36DF95AC-F707-428B-AA9F-7747DCFA34BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36DF95AC-F707-428B-AA9F-7747DCFA34BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36DF95AC-F707-428B-AA9F-7747DCFA34BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46C57B5A-B9C1-4DFD-8789-85C797D4CF54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46C57B5A-B9C1-4DFD-8789-85C797D4CF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46C57B5A-B9C1-4DFD-8789-85C797D4CF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46C57B5A-B9C1-4DFD-8789-85C797D4CF54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B024A334-7994-4BB3-AF96-522B2BDF5F08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B024A334-7994-4BB3-AF96-522B2BDF5F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B024A334-7994-4BB3-AF96-522B2BDF5F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B024A334-7994-4BB3-AF96-522B2BDF5F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F3FE09F-545F-4B35-A8BC-51F5D02350D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F3FE09F-545F-4B35-A8BC-51F5D02350D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F3FE09F-545F-4B35-A8BC-51F5D02350D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F3FE09F-545F-4B35-A8BC-51F5D02350D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A099E8D-F70D-4DB5-A774-D32D43CE0177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A099E8D-F70D-4DB5-A774-D32D43CE0177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A099E8D-F70D-4DB5-A774-D32D43CE0177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A099E8D-F70D-4DB5-A774-D32D43CE0177}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E37CD4D8-2F70-4606-8E5A-8C5F5CB03D27}
+	EndGlobalSection
+EndGlobal
