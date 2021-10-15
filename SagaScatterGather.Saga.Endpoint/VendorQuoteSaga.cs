@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.VisualBasic;
 using NServiceBus;
 using NServiceBus.Logging;
 using SagaScatterGather.Shared.Commands;
@@ -19,8 +18,9 @@ namespace SagaScatterGather.Saga.Endpoint
         IHandleTimeouts<VendorQuoteSaga.TimeoutState>
     {
         private static readonly ILog Log = LogManager.GetLogger<VendorQuoteSaga>();
-
-        public List<string> Vendors = new List<string> { "Vendor1", "Vendor2", "Vendor3" };
+        private readonly List<string> vendors = new List<string> { "Vendor1", "Vendor2", "Vendor3" };
+        private static readonly TimeSpan VendorQuoteSla = TimeSpan.FromSeconds(8);
+        //private static readonly TimeSpan VendorQuoteSla = TimeSpan.FromMinutes(1);
 
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<SagaData> mapper)
         {
@@ -35,8 +35,7 @@ namespace SagaScatterGather.Saga.Endpoint
             await context.Send(new Vendor3QuoteRequest { QuoteId = message.QuoteId });
             
             //8 second SLA for the user to get their quote results
-            await RequestTimeout<TimeoutState>(context, TimeSpan.FromSeconds(8));
-            //await RequestTimeout<TimeoutState>(context, TimeSpan.FromMinutes(1));
+            await RequestTimeout<TimeoutState>(context, VendorQuoteSla);
         }
 
         public async Task Handle(Vendor1QuoteResponse message, IMessageHandlerContext context)
@@ -94,8 +93,7 @@ namespace SagaScatterGather.Saga.Endpoint
             {
                 QuoteId = Data.QuoteId,
                 BestQuote = Data.VendorQuotes.Values.Min(),
-                //ExcludedVendors = Data.VendorQuotes.Keys.ToList()
-                ExcludedVendors = Vendors.Except(Data.VendorQuotes.Keys).ToList()
+                ExcludedVendors = vendors.Except(Data.VendorQuotes.Keys).ToList()
             });
 
             MarkAsComplete();
