@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -15,6 +16,12 @@ namespace SagaScatterGather.Saga.Endpoint
         public Task Handle(BestVendorQuoteReady message, IMessageHandlerContext context)
         {
             Log.Info($"Best Vendor Quote for Quote Id: {message.QuoteId} is {message.BestQuote}");
+            
+            if (message.ExcludedVendors.Any())
+            {
+                Log.Info($"Exlucded vendors: {string.Join(",", message.ExcludedVendors)}");
+            }
+
             return Task.CompletedTask;
         }
     }

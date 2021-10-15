@@ -20,6 +20,8 @@ namespace SagaScatterGather.Saga.Endpoint
     {
         private static readonly ILog Log = LogManager.GetLogger<VendorQuoteSaga>();
 
+        public List<string> Vendors = new List<string> { "Vendor1", "Vendor2", "Vendor3" };
+
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<SagaData> mapper)
         {
             mapper.ConfigureMapping<GetQuote>(message => message.QuoteId).ToSaga(sagaData => sagaData.QuoteId);
@@ -33,15 +35,15 @@ namespace SagaScatterGather.Saga.Endpoint
             await context.Send(new Vendor3QuoteRequest { QuoteId = message.QuoteId });
             
             //8 second SLA for the user to get their quote results
-            //await RequestTimeout<TimeoutState>(context, TimeSpan.FromSeconds(8));
-            await RequestTimeout<TimeoutState>(context, TimeSpan.FromMinutes(1));
+            await RequestTimeout<TimeoutState>(context, TimeSpan.FromSeconds(8));
+            //await RequestTimeout<TimeoutState>(context, TimeSpan.FromMinutes(1));
         }
 
         public async Task Handle(Vendor1QuoteResponse message, IMessageHandlerContext context)
         {
             Log.Info($"Handling Vendor1QuoteResponse with quote value of: {message.QuoteAmount}");
             
-            Data.VendorQuotes.Add("Vendor1Quote", message.QuoteAmount);
+            Data.VendorQuotes.Add("Vendor1", message.QuoteAmount);
             
             await CheckForAllVendorQuotesReceived(context);
         }
@@ -50,7 +52,7 @@ namespace SagaScatterGather.Saga.Endpoint
         {
             Log.Info($"Handling Vendor2QuoteResponse with quote value of: {message.QuoteAmount}");
             
-            Data.VendorQuotes.Add("Vendor2Quote", message.QuoteAmount);
+            Data.VendorQuotes.Add("Vendor2", message.QuoteAmount);
 
             await CheckForAllVendorQuotesReceived(context);
         }
@@ -59,7 +61,7 @@ namespace SagaScatterGather.Saga.Endpoint
         {
             Log.Info($"Handling Vendor3QuoteResponse with quote value of: {message.QuoteAmount}");
             
-            Data.VendorQuotes.Add("Vendor3Quote", message.QuoteAmount);
+            Data.VendorQuotes.Add("Vendor3", message.QuoteAmount);
 
             await CheckForAllVendorQuotesReceived(context);
         }
@@ -67,7 +69,7 @@ namespace SagaScatterGather.Saga.Endpoint
         private async Task CheckForAllVendorQuotesReceived(IMessageHandlerContext context)
         {
             //Have all vendors returned a quote
-            if (Data.VendorQuotes.Keys.Contains("Vendor1Quote") && Data.VendorQuotes.Keys.Contains("Vendor2Quote") && Data.VendorQuotes.Keys.Contains("Vendor3Quote"))
+            if (Data.VendorQuotes.Keys.Contains("Vendor1") && Data.VendorQuotes.Keys.Contains("Vendor2") && Data.VendorQuotes.Keys.Contains("Vendor3"))
             {
                 await context.Publish(new BestVendorQuoteReady
                 {
@@ -87,17 +89,22 @@ namespace SagaScatterGather.Saga.Endpoint
             //publish sla breached event
             await context.Publish(new VendorQuoteSagaSlaBreached { QuoteId = Data.QuoteId });
 
+            //publish BestVendorQuoteReady but include excluded vendors
+            await context.Publish(new BestVendorQuoteReady
+            {
+                QuoteId = Data.QuoteId,
+                BestQuote = Data.VendorQuotes.Values.Min(),
+                //ExcludedVendors = Data.VendorQuotes.Keys.ToList()
+                ExcludedVendors = Vendors.Except(Data.VendorQuotes.Keys).ToList()
+            });
+
             MarkAsComplete();
         }
 
         public class SagaData : ContainSagaData
         {
             public Guid QuoteId { get; set; }
-
             public Dictionary<string, decimal> VendorQuotes { get; set; } = new Dictionary<string, decimal>();
-            //public decimal Vendor1Quote { get; set; }
-            //public decimal Vendor2Quote { get; set; }
-            //public decimal Vendor3Quote { get; set; }
         }
 
         public class TimeoutState { }

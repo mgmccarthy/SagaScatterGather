@@ -13,8 +13,8 @@ namespace SagaScatterGather.Vendor1.Endpoint
         {
             Log.Info("Handling Vendor1QuoteRequest");
             
-            await Task.Delay(3000);
-            //await Task.Delay(10000); //TOO SLOW!
+            //await Task.Delay(3000);
+            await Task.Delay(10000); //TOO SLOW!
             
             await context.Reply(new Vendor1QuoteResponse { QuoteId = message.QuoteId, QuoteAmount = 200 });
         }

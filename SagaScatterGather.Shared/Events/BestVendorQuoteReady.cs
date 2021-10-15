@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using NServiceBus;
 
 namespace SagaScatterGather.Shared.Events
@@ -9,5 +8,6 @@ namespace SagaScatterGather.Shared.Events
     {
         public Guid QuoteId { get; set; }
         public decimal BestQuote { get; set; }
+        public List<string> ExcludedVendors { get; set; } = new List<string>();
     }
 }
