@@ -7,8 +7,6 @@ using SagaScatterGather.Shared.Messages;
 
 namespace SagaScatterGather.Saga.Endpoint
 {
-    //TODO: mark if a vendor quote has been received in saga data
-    //set a timeout for compensating action where only the ones that returned in the SLA timeframe get to have their quotes counted
     public class VendorQuoteSaga : Saga<VendorQuoteSaga.SagaData>,
         IAmStartedByMessages<GetQuote>,
         IHandleMessages<Vendor1QuoteResponse>,
@@ -32,25 +30,35 @@ namespace SagaScatterGather.Saga.Endpoint
 
         public Task Handle(Vendor1QuoteResponse message, IMessageHandlerContext context)
         {
-            Log.Info($"Handling VendorQuote1Response with quote value of: {message.QuoteAmount}");
+            Log.Info($"Handling Vendor1QuoteResponse with quote value of: {message.QuoteAmount}");
+            Data.Vendor1Quote = message.QuoteAmount;
             return Task.CompletedTask;
         }
 
         public Task Handle(Vendor2QuoteResponse message, IMessageHandlerContext context)
         {
-            Log.Info($"Handling VendorQuote2Response with quote value of: {message.QuoteAmount}");
+            Log.Info($"Handling Vendor2QuoteResponse with quote value of: {message.QuoteAmount}");
+            Data.Vendor2Quote = message.QuoteAmount;
             return Task.CompletedTask;
         }
 
         public Task Handle(Vendor3QuoteResponse message, IMessageHandlerContext context)
         {
-            Log.Info($"Handling VendorQuote3Response with quote value of: {message.QuoteAmount}");
+            Log.Info($"Handling Vendor3QuoteResponse with quote value of: {message.QuoteAmount}");
+            Data.Vendor3Quote = message.QuoteAmount;
             return Task.CompletedTask;
         }
+
+        //TODO:
+        //set SLA timeout for when the saga starts (aka, we guarntee x amount of competative quotes in 30 seconds!)
+        //write check for all three quotes received so you can publish the results before the SLA expires on the saga
 
         public class SagaData : ContainSagaData
         {
             public Guid QuoteId { get; set; }
+            public decimal Vendor1Quote { get; set; }
+            public decimal Vendor2Quote { get; set; }
+            public decimal Vendor3Quote { get; set; }
         }
     }
 }
