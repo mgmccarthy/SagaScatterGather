@@ -22,7 +22,7 @@ namespace SagaScatterGather.Saga.Endpoint
 
             var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
-            await Task.Delay(5000);
+            await Task.Delay(3000);
 
             await endpointInstance.SendLocal(new GetQuote {QuoteId = Guid.NewGuid()});
 

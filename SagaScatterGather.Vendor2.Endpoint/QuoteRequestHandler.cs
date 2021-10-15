@@ -9,10 +9,11 @@ namespace SagaScatterGather.Vendor2.Endpoint
     {
         private static readonly ILog Log = LogManager.GetLogger<QuoteRequestHandler>();
 
-        public Task Handle(Vendor2QuoteRequest message, IMessageHandlerContext context)
+        public async Task Handle(Vendor2QuoteRequest message, IMessageHandlerContext context)
         {
             Log.Info("Handling Vendor2QuoteRequest");
-            return context.Reply(new Vendor2QuoteResponse { QuoteId = message.QuoteId, QuoteAmount = 300 });
+            await Task.Delay(2000); //simulate RPC
+            await context.Reply(new Vendor2QuoteResponse { QuoteId = message.QuoteId, QuoteAmount = 300 });
         }
     }
 }
