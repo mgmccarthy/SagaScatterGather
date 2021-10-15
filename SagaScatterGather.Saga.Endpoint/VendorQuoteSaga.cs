@@ -9,7 +9,6 @@ namespace SagaScatterGather.Saga.Endpoint
 {
     //TODO: mark if a vendor quote has been received in saga data
     //set a timeout for compensating action where only the ones that returned in the SLA timeframe get to have their quotes counted
-    //will need to task.delay some vendor quote endpoints
     public class VendorQuoteSaga : Saga<VendorQuoteSaga.SagaData>,
         IAmStartedByMessages<GetQuote>,
         IHandleMessages<Vendor1QuoteResponse>,
@@ -39,13 +38,13 @@ namespace SagaScatterGather.Saga.Endpoint
 
         public Task Handle(Vendor2QuoteResponse message, IMessageHandlerContext context)
         {
-            Log.Info($"Handling VendorQuote1Response with quote value of: {message.QuoteAmount}");
+            Log.Info($"Handling VendorQuote2Response with quote value of: {message.QuoteAmount}");
             return Task.CompletedTask;
         }
 
         public Task Handle(Vendor3QuoteResponse message, IMessageHandlerContext context)
         {
-            Log.Info($"Handling VendorQuote1Response with quote value of: {message.QuoteAmount}");
+            Log.Info($"Handling VendorQuote3Response with quote value of: {message.QuoteAmount}");
             return Task.CompletedTask;
         }
 
