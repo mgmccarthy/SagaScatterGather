@@ -41,39 +41,33 @@ namespace SagaScatterGather.Saga.Endpoint
         public async Task Handle(Vendor1QuoteResponse message, IMessageHandlerContext context)
         {
             Log.Info($"Handling Vendor1QuoteResponse with quote value of: {message.QuoteAmount}");
-            
-            Data.VendorQuotes.Add("Vendor1", message.QuoteAmount);
-            
+            Data.CompletedVendorQuotes.Add("Vendor1", message.QuoteAmount);
             await CheckForAllVendorQuotesReceived(context);
         }
 
         public async Task Handle(Vendor2QuoteResponse message, IMessageHandlerContext context)
         {
             Log.Info($"Handling Vendor2QuoteResponse with quote value of: {message.QuoteAmount}");
-            
-            Data.VendorQuotes.Add("Vendor2", message.QuoteAmount);
-
+            Data.CompletedVendorQuotes.Add("Vendor2", message.QuoteAmount);
             await CheckForAllVendorQuotesReceived(context);
         }
 
         public async Task Handle(Vendor3QuoteResponse message, IMessageHandlerContext context)
         {
             Log.Info($"Handling Vendor3QuoteResponse with quote value of: {message.QuoteAmount}");
-            
-            Data.VendorQuotes.Add("Vendor3", message.QuoteAmount);
-
+            Data.CompletedVendorQuotes.Add("Vendor3", message.QuoteAmount);
             await CheckForAllVendorQuotesReceived(context);
         }
 
         private async Task CheckForAllVendorQuotesReceived(IMessageHandlerContext context)
         {
-            //Have all vendors returned a quote
-            if (Data.VendorQuotes.Keys.Contains("Vendor1") && Data.VendorQuotes.Keys.Contains("Vendor2") && Data.VendorQuotes.Keys.Contains("Vendor3"))
+            //Have all vendors returned a quote?
+            if (Data.CompletedVendorQuotes.Keys.Contains("Vendor1") && Data.CompletedVendorQuotes.Keys.Contains("Vendor2") && Data.CompletedVendorQuotes.Keys.Contains("Vendor3"))
             {
                 await context.Publish(new BestVendorQuoteReady
                 {
                     QuoteId = Data.QuoteId,
-                    BestQuote = Data.VendorQuotes.Values.Min()
+                    BestQuote = Data.CompletedVendorQuotes.Values.Min()
                 });
 
                 MarkAsComplete();
@@ -86,14 +80,14 @@ namespace SagaScatterGather.Saga.Endpoint
             await CheckForAllVendorQuotesReceived(context);
 
             //publish sla breached event
-            await context.Publish(new VendorQuoteSagaSlaBreached { QuoteId = Data.QuoteId });
+            await context.Publish(new VendorQuoteSlaBreached { QuoteId = Data.QuoteId });
 
             //publish BestVendorQuoteReady but include excluded vendors
             await context.Publish(new BestVendorQuoteReady
             {
                 QuoteId = Data.QuoteId,
-                BestQuote = Data.VendorQuotes.Values.Min(),
-                ExcludedVendors = vendors.Except(Data.VendorQuotes.Keys).ToList()
+                BestQuote = Data.CompletedVendorQuotes.Values.Min(),
+                ExcludedVendors = vendors.Except(Data.CompletedVendorQuotes.Keys).ToList()
             });
 
             MarkAsComplete();
@@ -102,7 +96,7 @@ namespace SagaScatterGather.Saga.Endpoint
         public class SagaData : ContainSagaData
         {
             public Guid QuoteId { get; set; }
-            public Dictionary<string, decimal> VendorQuotes { get; set; } = new Dictionary<string, decimal>();
+            public Dictionary<string, decimal> CompletedVendorQuotes { get; set; } = new Dictionary<string, decimal>();
         }
 
         public class TimeoutState { }

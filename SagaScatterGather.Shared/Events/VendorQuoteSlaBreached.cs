@@ -3,7 +3,7 @@ using NServiceBus;
 
 namespace SagaScatterGather.Shared.Events
 {
-    public class VendorQuoteSagaSlaBreached : IEvent
+    public class VendorQuoteSlaBreached : IEvent
     {
         public Guid QuoteId { get; set; }
     }
