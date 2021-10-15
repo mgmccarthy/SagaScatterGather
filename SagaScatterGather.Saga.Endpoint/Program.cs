@@ -1,6 +1,7 @@
 ﻿using NServiceBus;
 using System;
 using System.Threading.Tasks;
+using SagaScatterGather.Shared.Messages;
 
 namespace SagaScatterGather.Saga.Endpoint
 {
@@ -12,7 +13,11 @@ namespace SagaScatterGather.Saga.Endpoint
 
             var endpointConfiguration = new EndpointConfiguration("SagaScatterGather.Saga.Endpoint");
             endpointConfiguration.UsePersistence<LearningPersistence>();
-            endpointConfiguration.UseTransport<LearningTransport>();
+            
+            var transport = endpointConfiguration.UseTransport<LearningTransport>();
+            transport.Routing().RouteToEndpoint(messageType: typeof(Vendor1QuoteRequest), destination: "SagaScatterGather.Vendor1.Endpoint");
+            transport.Routing().RouteToEndpoint(messageType: typeof(Vendor2QuoteRequest), destination: "SagaScatterGather.Vendor2.Endpoint");
+            transport.Routing().RouteToEndpoint(messageType: typeof(Vendor3QuoteRequest), destination: "SagaScatterGather.Vendor3.Endpoint");
 
             var endpointInstance = await NServiceBus.Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
