@@ -9,4 +9,8 @@
     <PackageReference Include="NServiceBus" Version="7.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SagaScatterGather.Shared\SagaScatterGather.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
